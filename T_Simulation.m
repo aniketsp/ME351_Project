@@ -10,7 +10,7 @@ minorLossFactor = 0.5+0.962;
 %Geometry
 d_1 = 0.00794;              %m
 d_2 = 0.01125;              %m
-L_1 = 0.22;                 %m
+L_1 = 0.42;                 %m
 L_2 = 0.02;                 %m
 
 area_1 = (d_1/2)^2*pi;      %m^2
@@ -39,18 +39,22 @@ volumetricRate = 0;
 while(notEmpty == true)
     factorGuessDeviation = 10;
     iterations = 0;
-    while((factorGuessDeviation > 0.005) & (iterations < 50))
+    while((factorGuessDeviation > 0.002) & (iterations < 50))
         
-        pDrop = (-15.12*velocity^2/32.25) -(g*(L_1)/150) + (L_1*velocity^2*frictionFactorGuess)/(2*d_1) + (L_2*velocity^2*frictionFactorGuess)/(32.24*d_2) + (minorLossFactor*(velocity^2)/2);
+%         pDrop = (-15.12*velocity^2/32.25) -(g*(L_1)/150) + (L_1*velocity^2*frictionFactorGuess)/(2*d_1) + (L_2*velocity^2*frictionFactorGuess)/(32.24*d_2) + (minorLossFactor*(velocity^2)/2);
         
-        velEQN = [velocity == sqrt(2*g*height -pDrop)];
-        S = solve(velEQN, velocity)
-        Re = double(S)*rho*d_1/viscosity;
+%         velEQN = [velocity == sqrt(2*g*height -pDrop)];
+%         S = solve(velEQN, velocity);
+
+        velocity = sqrt((g*(300*height+L_1))/(150*(0.062 + L_1*frictionFactorGuess/d_1 + L_2*frictionFactorGuess/16.12/d_2 + minorLossFactor)));
+        %Re = double(S)*rho*d_1/viscosity;
+        Re = velocity*rho*d_1/viscosity;
         a = 2.51/Re;
         frictionFactorComp = 1/(2*lambertw( log(10)/(2*a)*10^(b/(2*a)))/log(10) - (b/a))^2;
         factorGuessDeviation = abs(frictionFactorComp - frictionFactorGuess);
         frictionFactorGuess = frictionFactorComp;
-        volumetricRate = double(S)*area_1;    
+%         volumetricRate = double(S)*area_1;    
+        volumetricRate = velocity*area_1;    
         
         iterations = iterations+1;
         

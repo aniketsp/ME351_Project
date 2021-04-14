@@ -4,7 +4,7 @@ clc
 gravity = 9.81;             %m/s^2
 rho = 998;                  %kg/m^3
 diameter = 0.00794;         %m
-length = 0.3;               %m
+length = 0.2;               %m
 area = (diameter/2)^2*pi;   %m^2
 height = 0.10;              %m
 volumeTotal = 0.32*0.26*0.1;
